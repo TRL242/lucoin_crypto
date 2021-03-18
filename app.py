@@ -4,12 +4,15 @@
 #import flask dependencies for web GUI
 from flask import Flask, render_template, flash, redirect, url_for, session, request, logging
 from passlib.hash import sha256_crypt
-import MySQLdb
+from flask_mysqldb import MySQL
 from functools import wraps
 
-# #import other functions and classes
-# from sqlhelpers import *
-# from forms import *
+#import other functions and classes
+from sqlhelpers import *
+from forms import *
+
+#other dependencies
+import time
 
 #other dependencies
 import time
@@ -17,11 +20,11 @@ import time
 #initialize the app
 app = Flask(__name__)
 
-#configure MySQLdb
+#configure mysql
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = ''
-app.config['MYSQL_DB'] = 'lucoin'
+app.config['MYSQL_PASSWORD'] = 'gerome'
+app.config['MYSQL_DB'] = 'crypto'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
 #initialize mysql
@@ -63,7 +66,7 @@ def register():
 
         #make sure user does not already exist
         if isnewuser(username):
-            #add the user to MySQLdb and log them in
+            #add the user to mysql and log them in
             password = sha256_crypt.encrypt(form.password.data)
             users.insert(name,email,username,password)
             log_in_user(username)
